@@ -87,9 +87,13 @@ abstract class OperationContainer
         return $this->operations;
     }
 
-    public function addOperation(AggregationOperation $operation) : OperationContainer
+    /**
+     * @param AggregationOperation $operation
+     * @return $this
+     * adding operation from class scope doesn't need to any processing
+     */
+    protected function mergeOperation(AggregationOperation $operation) : OperationContainer
     {
-        $operation->setTableName($this->tableName);
         $this->operations[] = $operation;
         return $this;
     }
@@ -97,6 +101,36 @@ abstract class OperationContainer
     /**
      * @param array $operations
      * @return OperationContainer
+     * adding operation from class scope doesn't need to any processing
+     */
+    protected function mergeOperations(array $operations) : OperationContainer
+    {
+        foreach ($operations as $operation)
+        {
+            if($operation instanceof AggregationOperation)
+            {
+                $this->mergeOperation($operation);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @param AggregationOperation $operation
+     * @return $this
+     * adding operation from global scope needs to some processing (like adding table name)
+     */
+    public function addOperation(AggregationOperation $operation) : OperationContainer
+    {
+        $operation->setTableName($this->tableName);
+        $this->mergeOperation($operation);
+        return $this;
+    }
+
+    /**
+     * @param array $operations
+     * @return OperationContainer
+     * adding operations from global scope needs to some processing (like adding table name)
      */
     public function setOperations(array $operations): OperationContainer
     {
@@ -120,8 +154,7 @@ abstract class OperationContainer
     protected function ColumnSelectingAndGroupingFunc(GroupingByColumn $column) : void
     {
         $column->setTableName($this->tableName);
-        $columnAlias = $column->getResultProcessingColumnAlias();
-        $this->groupedByColumnAliases[] = $columnAlias;
+        $this->groupedByColumnAliases[] = $column->getResultProcessingColumnAlias();
         $this->addSelectingNeededColumn($column);
     }
     /**
@@ -174,12 +207,22 @@ abstract class OperationContainer
         return $this->groupedByColumnAliases;
     }
 
-
+    protected function processOrderingStyle(string $orderingStyleConstant = "") : string
+    {
+        if(
+            !$orderingStyleConstant
+            ||
+            !in_array($orderingStyleConstant,OrderingTypes::ORDERING_STYLES )
+        )
+        {
+            $orderingStyleConstant = OrderingTypes::ASC_ORDERING;
+        }
+        return $orderingStyleConstant;
+    }
     public function orderBy(Column $column , string $orderingStyleConstant = "") : OperationContainer
     {
         $column->setTableName($this->tableName);
-        if(!$orderingStyleConstant){$orderingStyleConstant = OrderingTypes::ASC_ORDERING;}
-        $this->orderingColumns[$column->getColumnFullName()] = $orderingStyleConstant;
+        $this->orderingColumns[$column->getColumnFullName()] = $this->processOrderingStyle($orderingStyleConstant);
         return $this;
     }
 

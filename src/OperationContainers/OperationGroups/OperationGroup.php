@@ -73,9 +73,8 @@ class OperationGroup extends OperationContainer
         $this->mergeGroupedByColumnAliases($relationship->getGroupedByColumnAliases());
         $this->mergeColumnsForProcessingRequiredValues($relationship->getColumnsForProcessingRequiredValues());
 
-
         $this->mergeOrderByColumns($relationship->getOrderingColumns());
-        $this->setOperations($relationship->getOperations());
+        $this->mergeOperations($relationship->getOperations());
     }
 
     public function loadRelationship(RelationshipLoader $relationship) : OperationGroup
