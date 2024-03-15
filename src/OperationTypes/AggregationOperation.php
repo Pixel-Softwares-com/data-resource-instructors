@@ -19,8 +19,6 @@ abstract class AggregationOperation
      */
     protected array $orderingColumns = [];
     protected string $tableName = "";
-    const AggregatingColumnAlias = "alias";
-    const AggregatingColumnLabel = "label";
 
     abstract static public function getOperationName() : string;
 
