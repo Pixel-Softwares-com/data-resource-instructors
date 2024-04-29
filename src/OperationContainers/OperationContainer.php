@@ -7,6 +7,7 @@ use DataResourceInstructors\OperationComponents\Columns\GroupingByColumn;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionGroups\AndWhereConditionGroup;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionGroups\WhereConditionGroup;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionTypes\WhereCondition;
+use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionTypes\WhereMethod;
 use DataResourceInstructors\OperationComponents\Ordering\OrderingTypes;
 use DataResourceInstructors\OperationContainers\Traits\HasSelectingNeededColumns;
 use DataResourceInstructors\OperationTypes\AggregationOperation;
@@ -16,6 +17,7 @@ abstract class OperationContainer
     use HasSelectingNeededColumns;
 
 
+    protected array $whereMethods = [];
     /**
      * @var array
      * An Array Of WhereCondition Objects
@@ -252,6 +254,27 @@ abstract class OperationContainer
         $condition->setTableName($this->tableName);
         $this->defaultWhereConditionGroup->addWhereCondition($condition);
         return $this;
+    }
+    /**
+     * @param WhereMethod $whereMethod
+     * @return $this
+     *
+     * For QueryOperationGroup : These Conditions Will Be Attached On The Query .
+     * For RelationshipLoader :  These Conditions Will Be Attached On The Join Conditions As Additional Conditions.
+     */
+    public function whereByMethod(WhereMethod $whereMethod) : OperationContainer
+    {
+        $whereMethod->setTableName($this->tableName);
+        $this->whereMethods[] = $whereMethod;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWhereMethods(): array
+    {
+        return $this->whereMethods;
     }
 
     public function whereConditionGroup(WhereConditionGroup $conditionGroup) : OperationContainer
