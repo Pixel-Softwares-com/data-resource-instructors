@@ -15,7 +15,7 @@ trait HasSelectingNeededColumns
      * @param Column $column
      * @return OperationContainer|HasSelectingNeededColumns
      */
-    protected function addSelectingNeededColumn( Column $column) : self
+    public function addSelectingNeededColumn( Column $column) : self
     {
         $this->columns[] = $column;
         $this->selectingNeededColumns[$column->getColumnFullName()] = $column->getResultProcessingColumnAlias();
@@ -26,7 +26,7 @@ trait HasSelectingNeededColumns
      * @param array $selectingNeededColumns
      * @return HasSelectingNeededColumns|OperationContainer
      */
-    protected function addSelectingNeededColumns(array $selectingNeededColumns): self
+    public function addSelectingNeededColumns(array $selectingNeededColumns): self
     {
         /** @var Column $column */
         foreach ($selectingNeededColumns as $column)
