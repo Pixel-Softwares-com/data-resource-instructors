@@ -6,6 +6,8 @@ namespace DataResourceInstructors\OperationComponents\Columns;
 class AggregationColumn extends Column
 {
     protected string $resultLabel = "";
+    protected int $resultLabelCharLengthLimit = -1;
+    protected string $alternativeShortResultLabel = "";
 
     /**
      * @param ...$params
@@ -49,4 +51,41 @@ class AggregationColumn extends Column
         return $this->resultLabel;
     }
 
+    /**
+     * @param int $length
+     * @param string $shortLabel
+     * @return $this
+     */
+    public function limitResultLabelCharLength(int $length , string $shortLabel) : AggregationColumn
+    {
+        $this->setResultLabelCharLengthLimit($length);
+        $this->setAlternativeShortResultLabel($shortLabel);
+        return $this;
+    }
+    public function disableLimitingResultLabelCharLength() : self
+    {
+        $this->setResultLabelCharLengthLimit( -1 );
+        return $this;
+    }
+
+    /**
+     * @param int $length
+     */
+    protected function setResultLabelCharLengthLimit(int $length): void
+    {
+        $this->resultLabelCharLengthLimit = $length;
+    }
+
+    /**
+     * @param string $shortLabel
+     */
+    protected function setAlternativeShortResultLabel(string $shortLabel): void
+    {
+        if(!empty($shortLabel))
+        {
+            $this->alternativeShortResultLabel = $shortLabel;
+            return;
+        }
+        $this->disableLimitingResultLabelCharLength();
+    }
 }

@@ -8,7 +8,6 @@ class Column
     protected string $tableName = "";
     protected string $ResultProcessingColumnAlias = "";
 
-
     public function __construct(string $columnName)
     {
         $this->columnName = $columnName;
