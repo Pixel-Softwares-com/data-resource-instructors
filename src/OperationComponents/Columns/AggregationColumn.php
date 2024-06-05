@@ -6,7 +6,7 @@ namespace DataResourceInstructors\OperationComponents\Columns;
 class AggregationColumn extends Column
 {
     protected string $resultLabel = "";
-    protected int $resultLabelCharLengthLimit = -1;
+    protected int $resultLabelCharMaxLength = -1;
     protected string $alternativeShortResultLabel = "";
 
     /**
@@ -56,24 +56,24 @@ class AggregationColumn extends Column
      * @param string $shortLabel
      * @return $this
      */
-    public function limitResultLabelCharLength(int $length , string $shortLabel) : AggregationColumn
+    public function setResultLabelMaxLength(int $length , string $shortLabel) : AggregationColumn
     {
-        $this->setResultLabelCharLengthLimit($length);
+        $this->setResultLabelCharMaxLength($length);
         $this->setAlternativeShortResultLabel($shortLabel);
         return $this;
     }
     public function disableLimitingResultLabelCharLength() : self
     {
-        $this->setResultLabelCharLengthLimit( -1 );
+        $this->setResultLabelCharMaxLength( -1 );
         return $this;
     }
 
     /**
      * @param int $length
      */
-    protected function setResultLabelCharLengthLimit(int $length): void
+    protected function setResultLabelCharMaxLength(int $length): void
     {
-        $this->resultLabelCharLengthLimit = $length;
+        $this->resultLabelCharMaxLength = $length;
     }
 
     /**
@@ -87,5 +87,23 @@ class AggregationColumn extends Column
             return;
         }
         $this->disableLimitingResultLabelCharLength();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlternativeShortResultLabel(): string
+    {
+        return $this->alternativeShortResultLabel;
+    }
+
+    public function getResultLabelMaxLength() : int
+    {
+        return $this->resultLabelCharMaxLength;
+    }
+
+    public function isCharLengthLimited() : bool
+    {
+        return $this->getResultLabelMaxLength() > 0 ;
     }
 }
