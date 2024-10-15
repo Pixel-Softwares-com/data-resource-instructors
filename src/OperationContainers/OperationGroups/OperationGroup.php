@@ -112,21 +112,22 @@ class OperationGroup extends OperationContainer
         return $this->dateSensitivity;
     }
 
-    protected function setDateColumnTableNameConveniently(Column $column , bool $relationshipColumn = false  , ?RelationshipLoader $relationshipLoader = null ) : void
+    protected function setDateColumnTableNameConveniently(Column $column ,  ?RelationshipLoader $relationshipLoader = null ) : void
     {
-        if(!$relationshipColumn)
-        {
-            $tableName = $this->tableName;
-        }else
+        if($relationshipLoader)
         {
             $tableName = $relationshipLoader->getTableName();
+        }else
+        {
+            $tableName = $this->tableName;
         }
+
         $column->setTableName($tableName);
     }
 
-    public function enableDateSensitivity(Column $dateColumn , bool $relationshipColumn = false , ?RelationshipLoader $relationshipLoader = null) : OperationGroup
+    public function enableDateSensitivity(Column $dateColumn  , ?RelationshipLoader $relationshipLoader = null) : OperationGroup
     {
-        $this->setDateColumnTableNameConveniently($dateColumn , $relationshipColumn , $relationshipLoader);
+        $this->setDateColumnTableNameConveniently($dateColumn , $relationshipLoader);
         $this->dateColumn = $dateColumn->setResultProcessingColumnDefaultAlias();
         $this->dateSensitivity = true;
         return $this;

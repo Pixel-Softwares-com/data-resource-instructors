@@ -40,6 +40,16 @@ You may need to use this Column type in OperationContainer::orderBy or Operation
       It accepts a string value , And if you instructed the OperationGroup to group the rows by some column
       you can use that column alias prefixed with ":" (look at the example bellow ).
     - getResultLabel() : Gets the label of this aggregation operation's result done on this column .
+    - setResultLabelMaxLength(int $length , string $shortLabel) :
+      set max character length that must be applied on the column final result label (after data processing) ,
+      it takes as the length integer value the first parameter , and the alternative result label will be applied if the primary result label is longer than the length value .
+      - Notes to use in DataResource :
+            - The alternative result label must also be processed to replace the grouping column colon prefixed aliases with their values exists in the data array .
+            - If the both primary and the alternative result label are longer than the length value ... the alternative result label must be sliced with character length equal to length parameter value .  
+    - getAlternativeShortResultLabel() : Gets the alternative result label (if it is not set by setResultLabelMaxLength method by default gets an empty string ) .
+    - getResultLabelMaxLength() : Gets the length must limit the column result labels (if it is not set by setResultLabelMaxLength method by default gets -1 integer value .)
+    - isCharLengthLimited() : Gets boolean value , true if there is a limit on resultLabel character length  ,false it there is not a limit . 
+    - disableLimitingResultLabelCharLength() : To disable applying any result label character length limiting .
 
 - Example : this code is used to getting count of clients added in the date period coming from date filters 
  (by counting clients table 's id column & grouped by its status)  ,
