@@ -59,7 +59,7 @@ abstract class WhereInMethod extends WhereMethod
         return parent::create($column , static::getValidValueArray($value) , $operator);
     }
 
-    public function __construct(Column $column  , Column $value , string $operator = "=")
+    public function __construct(Column $column  , mixed $value , string $operator = "=")
     {
         parent::__construct($column , static::getValidValueArray($value) , $operator);
     } 
