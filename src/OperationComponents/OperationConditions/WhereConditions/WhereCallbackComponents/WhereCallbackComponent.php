@@ -40,5 +40,10 @@ abstract class WhereCallbackComponent
         $this->exceptedDataResourceTypes[$dataResourceType] = $dataResourceType;
         return $this; 
     }
+    
+    public function getExceptedDataResourceTypes() : array
+    {
+        return $this->exceptedDataResourceTypes;
+    }
 
 }
