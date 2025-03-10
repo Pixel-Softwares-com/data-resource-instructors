@@ -4,6 +4,7 @@ namespace DataResourceInstructors\OperationContainers;
 
 use DataResourceInstructors\OperationComponents\Columns\Column;
 use DataResourceInstructors\OperationComponents\Columns\GroupingByColumn;
+use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereCallbackComponents\WhereCallbackComponent;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionGroups\AndWhereConditionGroup;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionGroups\WhereConditionGroup;
 use DataResourceInstructors\OperationComponents\OperationConditions\WhereConditions\WhereConditionTypes\WhereCondition;
@@ -16,7 +17,7 @@ abstract class OperationContainer
 {
     use HasSelectingNeededColumns;
 
-
+    protected array $whereCallbackComponents = [];
     protected array $whereMethods = [];
     /**
      * @var array
@@ -275,6 +276,17 @@ abstract class OperationContainer
     public function getWhereMethods(): array
     {
         return $this->whereMethods;
+    }
+
+    public function whereByCallback(WhereCallbackComponent $whereCallback) : OperationContainer
+    {
+        $this->whereCallbackComponents[] = $whereCallback;
+        return $this;
+    }
+
+    public function getWhereCallbackComponents() : array
+    {
+        return $this->whereCallbackComponents;
     }
 
     public function whereConditionGroup(WhereConditionGroup $conditionGroup) : OperationContainer
