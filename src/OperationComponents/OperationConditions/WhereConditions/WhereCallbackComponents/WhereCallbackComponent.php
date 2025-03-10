@@ -5,7 +5,7 @@ namespace DataResourceInstructors\OperationComponents\OperationConditions\WhereC
 abstract class WhereCallbackComponent
 {
     protected $callback;
-    protected array $exclusiveDataResourceTypes = [];
+    protected array $exceptedDataResourceTypes = [];
 
     public function __construct(callable $callback)
     {
@@ -24,15 +24,20 @@ abstract class WhereCallbackComponent
         $this->callback = $callback;
     }
 
-    public function callExclusivelyForDataResourceTypes(array $dataResourceTypes) : self
+    public function getCallback() : string
     {
-        $this->exclusiveDataResourceTypes = $dataResourceTypes;
+        return $this->callback ;
+    }
+
+    public function exceptDataResourceTypes(array $dataResourceTypes) : self
+    {
+        $this->exceptedDataResourceTypes = $dataResourceTypes;
         return $this;
     }
 
-    public function callExclusivelyForDataResourceType(string $dataResourceType) : self
+    public function exceptDataResourceType(string $dataResourceType) : self
     {
-        $this->exclusiveDataResourceTypes[$dataResourceType] = $dataResourceType;
+        $this->exceptedDataResourceTypes[$dataResourceType] = $dataResourceType;
         return $this; 
     }
 
